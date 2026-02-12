@@ -20,6 +20,34 @@
         .bg-suit { position: absolute; opacity: 0.03; color: var(--gold); animation: suit-drift linear infinite; }
         @keyframes suit-drift { 0% { transform: translateY(110vh) rotate(0deg); } 100% { transform: translateY(-10vh) rotate(360deg); } }
 
+        .bg-3d-cards { position: fixed; inset: 0; pointer-events: none; z-index: 0; perspective: 1600px; transform-style: preserve-3d; overflow: hidden; }
+        .bg-3d-card {
+            position: absolute;
+            width: 88px;
+            height: 128px;
+            border-radius: 10px;
+            border: 1px solid rgba(212,168,67,0.4);
+            background: linear-gradient(155deg, rgba(20,20,20,0.85), rgba(8,8,8,0.9));
+            box-shadow: 0 14px 35px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(240,208,120,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.1rem;
+            color: var(--gold-light);
+            opacity: 0.25;
+            filter: brightness(0.25) saturate(1.3);
+            transform-style: preserve-3d;
+            transition: transform 0.16s linear;
+            will-change: transform;
+        }
+        .bg-3d-card::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 7px;
+            border: 1px solid rgba(240,208,120,0.16);
+        }
+
         .orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; animation: orb-pulse 8s ease-in-out infinite alternate; }
         .orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(212,168,67,0.08), transparent 70%); top: 10%; right: -10%; }
         .orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,168,67,0.06), transparent 70%); top: 50%; left: -5%; animation-delay: 3s; }
@@ -89,6 +117,15 @@
         .story-text p { margin-bottom: 1.8rem; }
         .story-text strong { color: var(--white); font-weight: 500; }
         .story-text em { color: var(--gold-light); font-style: normal; }
+        .pyramid { text-align: center; }
+        .pyramid .line { display: block; margin: 0 auto 0.25rem; max-width: 40ch; }
+        .pyramid .line:nth-child(2) { max-width: 32ch; }
+        .pyramid .line:nth-child(3) { max-width: 24ch; }
+        .pyramid .line:nth-child(4) { max-width: 18ch; margin-bottom: 0; }
+        .pyramid-invert .line:nth-child(1) { max-width: 20ch; }
+        .pyramid-invert .line:nth-child(2) { max-width: 28ch; }
+        .pyramid-invert .line:nth-child(3) { max-width: 36ch; }
+        .pyramid-invert .line:nth-child(4) { max-width: 42ch; margin-bottom: 0; }
         .highlight-box { border-right: 3px solid var(--gold); padding: 1.5rem 2rem; margin: 2.5rem 0; background: linear-gradient(90deg,rgba(212,168,67,0.07) 0%,transparent 100%); border-radius: 0 8px 8px 0; position: relative; }
         .highlight-box::before { content: '\2726'; position: absolute; top: -10px; left: 10px; font-size: 1.5rem; color: var(--gold); opacity: 0.1; animation: srot 6s linear infinite; }
         @keyframes srot { to { transform: rotate(360deg); } }
@@ -205,6 +242,7 @@
             .cards-scroll-container { height: 500vh; }
             .scroll-progress { display: none; }
             .floating-card { display: none; }
+            .bg-3d-card { width: 64px; height: 94px; font-size: 1.6rem; }
             .ace { width: 85px; height: 125px; }
             .ace-pip { font-size: 2.8rem; }
             .ace-corner-mark .c-rank { font-size: 0.65rem; }
@@ -230,6 +268,7 @@
 </head>
 <body>
     <div class="bg-suits" id="bgSuits"></div>
+    <div class="bg-3d-cards" id="bg3dCards"></div>
     <div class="starfield" id="starfield"></div>
     <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
 
@@ -255,10 +294,25 @@
         <div class="container">
             <div class="section-label reveal">הסיפור</div>
             <div class="story-text">
-                <p class="reveal">מכיר את הרגע הזה במסיבה או בארוחה משפחתית שבו האנרגיה יורדת? כולם בטלפונים, השיחה נתקעת, <strong>וחסר ה"ניצוץ" הזה שיעיר את כולם?</strong></p>
+                <p class="reveal pyramid">
+                    <span class="line">מכיר את הרגע הזה במסיבה או בארוחה משפחתית כשהאנרגיה יורדת?</span>
+                    <span class="line">כולם בטלפונים, והשיחה נתקעת באמצע.</span>
+                    <span class="line"><strong>אין את הניצוץ</strong> שמדליק את כולם.</span>
+                    <span class="line">רק שקט.</span>
+                </p>
                 <div class="highlight-box reveal"><p>עכשיו דמיין שאתה שולף חפיסת קלפים, או סתם מבקש ממישהו לחשוב על מספר – <em>ובתוך 30 שניות כולם עם פה פעור, מסתכלים רק עליך.</em></p></div>
-                <p class="reveal">קוראים לי <strong>יאיר</strong>, ואני אמן חושים. ביומיום אני מלמד אנשים איך לשלוט בתודעה ברמה הגבוהה ביותר. אבל שמתי לב למשהו מעניין: <em>רוב האנשים לא מחפשים להיות קוסמים מקצועיים.</em> הם פשוט רוצים לדעת איך לעשות את ה"קסם" הזה שגורם לאנשים לחייך, להתרגש ולזכור אותם.</p>
-                <p class="reveal">לכן יצרתי את <strong>״ערכת ההתחלה״</strong>: קורס ממוקד, פרקטי ומהיר ב-<em>197 ש״ח בלבד.</em></p>
+                <p class="reveal pyramid">
+                    <span class="line">אני <strong>יאיר</strong>, אמן חושים ומדריך אנשים לשלוט בתודעה.</span>
+                    <span class="line">אבל הבנתי שרוב האנשים לא רוצים קריירת במה.</span>
+                    <span class="line">הם רוצים קסם קטן עם אימפקט גדול.</span>
+                    <span class="line">ולהיזכר.</span>
+                </p>
+                <p class="reveal pyramid-invert">
+                    <span class="line">לכן</span>
+                    <span class="line">יצרתי את <strong>״ערכת ההתחלה״</strong>.</span>
+                    <span class="line">קורס ממוקד, פרקטי ומהיר למי שרוצה להדהים.</span>
+                    <span class="line">ב־<em>197 ש״ח בלבד</em>, עם גישה מיידית.</span>
+                </p>
             </div>
         </div>
     </section>
@@ -355,8 +409,18 @@
             <div class="section-label reveal" style="justify-content:center;">הזמנה</div>
             <h2 class="reveal" style="text-align:center;font-weight:900;font-size:clamp(1.8rem,3.5vw,2.5rem);background:linear-gradient(135deg,var(--white),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.5rem;">למה דווקא הקורס הזה?</h2>
             <div class="closing-text reveal">
-                <p>אתה לא צריך "ידיים מהירות" ואתה לא צריך להיות שחקן הוליוודי. השיטות שאני מלמד בקורס הזה <strong>בנויות כך שכל אחד יכול להצליח בהן, ומהר.</strong></p><br>
-                <p>במחיר של <em>197 ש"ח</em> (פחות מבילוי שישי בערב), אתה מקבל <strong>גישה לידע שילווה אותך לכל החיים.</strong> בפעם הבאה שישאלו "מי יודע לעשות משהו מגניב?" – אתה תהיה זה שיחייך.</p>
+                <p class="pyramid">
+                    <span class="line">אתה לא צריך ידיים מהירות,</span>
+                    <span class="line">ולא צריך להיות שחקן הוליוודי.</span>
+                    <span class="line">השיטה בנויה כך שכל אחד מצליח מהר.</span>
+                    <span class="line"><strong>גם אתה.</strong></span>
+                </p><br>
+                <p class="pyramid-invert">
+                    <span class="line">במחיר של <em>197 ש״ח</em>,</span>
+                    <span class="line">אתה מקבל ידע שעובד בכל מפגש.</span>
+                    <span class="line"><strong>ידע שילך איתך לכל החיים,</strong></span>
+                    <span class="line">ובפעם הבאה כולם יסתכלו עליך ויחייכו.</span>
+                </p>
             </div>
             <div class="price-block reveal"><div class="price-glow"></div><span class="price-amount">₪197</span><span class="price-context">פחות מבילוי שישי בערב</span></div>
             <div class="reveal"><a href="#" class="cta-btn">כן יאיר! אני רוצה גישה מיידית לקורס ב-197 ₪ בלבד<span class="cta-sub">קבל גישה דיגיטלית מיידית למייל</span></a></div>
@@ -380,6 +444,30 @@
         const bs=document.getElementById('bgSuits');
         for(let i=0;i<15;i++){const s=document.createElement('div');s.classList.add('bg-suit');s.textContent=suits[Math.floor(Math.random()*suits.length)];s.style.left=Math.random()*100+'%';s.style.fontSize=(1.5+Math.random()*3)+'rem';s.style.animationDuration=(15+Math.random()*20)+'s';s.style.animationDelay=Math.random()*15+'s';bs.appendChild(s);}
 
+        // 3D floating cards background
+        const bg3dCards=document.getElementById('bg3dCards');
+        const cardSymbols=['\u2660','\u2665','\u2666','\u2663'];
+        const parallaxCards=[];
+        for(let i=0;i<16;i++){
+            const c=document.createElement('div');
+            c.classList.add('bg-3d-card');
+            c.textContent=cardSymbols[Math.floor(Math.random()*cardSymbols.length)];
+            const x=Math.random()*100;
+            const y=Math.random()*100;
+            const rot=(Math.random()*50)-25;
+            const z=Math.round((Math.random()*360)-180);
+            const speed=0.03+Math.random()*0.14;
+            c.dataset.baseY=String(y);
+            c.dataset.rotation=String(rot);
+            c.dataset.depth=String(z);
+            c.dataset.speed=String(speed);
+            c.style.left=x+'%';
+            c.style.top=y+'%';
+            c.style.transform='translate3d(0,0,'+z+'px) rotateX('+(rot*0.45)+'deg) rotateY('+(-rot*0.35)+'deg) rotateZ('+rot+'deg)';
+            bg3dCards.appendChild(c);
+            parallaxCards.push(c);
+        }
+
         // Scroll Reveal
         const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.15});
         document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
@@ -390,8 +478,20 @@
         // Hero tilt
         if(window.innerWidth>768){const hero=document.getElementById('hero'),hc=document.getElementById('heroContent');hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-0.5;const y=(e.clientY-r.top)/r.height-0.5;hc.style.transform='perspective(1000px) rotateY('+x*2+'deg) rotateX('+(-y*2)+'deg)';});hero.addEventListener('mouseleave',()=>{hc.style.transform='perspective(1000px) rotateY(0) rotateX(0)';});}
 
-        // Parallax orbs
-        window.addEventListener('scroll',()=>{const y=window.scrollY;document.querySelectorAll('.orb').forEach((o,i)=>{o.style.transform='translateY('+y*(0.02+i*0.01)+'px)';});});
+        // Parallax orbs + floating 3D cards
+        window.addEventListener('scroll',()=>{
+            const y=window.scrollY;
+            document.querySelectorAll('.orb').forEach((o,i)=>{o.style.transform='translateY('+y*(0.02+i*0.01)+'px)';});
+            parallaxCards.forEach(card=>{
+                const speed=Number(card.dataset.speed);
+                const baseY=Number(card.dataset.baseY);
+                const rot=Number(card.dataset.rotation);
+                const depth=Number(card.dataset.depth);
+                const shiftY=(y*speed)%180;
+                card.style.transform='translate3d(0,'+shiftY+'px,'+depth+'px) rotateX('+(rot*0.45)+'deg) rotateY('+(-rot*0.35)+'deg) rotateZ('+rot+'deg)';
+                card.style.top=baseY+'%';
+            });
+        },{passive:true});
 
         // CTA
         document.querySelectorAll('.cta-btn').forEach(b=>{b.addEventListener('click',e=>{e.preventDefault();alert('\u05DB\u05D0\u05DF \u05EA\u05D5\u05E1\u05D9\u05E3 \u05D0\u05EA \u05D4\u05DC\u05D9\u05E0\u05E7 \u05DC\u05E2\u05DE\u05D5\u05D3 \u05D4\u05EA\u05E9\u05DC\u05D5\u05DD \uD83C\uDFA9');});});
