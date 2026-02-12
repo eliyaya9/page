@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קורס קסמים ואומנות חושים | יאיר</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4A843; --gold-light: #F0D078; --gold-dark: #B8912A;
+            --black: #0A0A0A; --black-soft: #111; --black-card: #1A1A1A;
+            --white: #F5F0E8; --white-dim: #C8C0B0;
+            --gradient-gold: linear-gradient(135deg, #D4A843, #F0D078, #D4A843);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rubik', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; direction: rtl; }
+        body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+
+        .bg-suits { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .bg-suit { position: absolute; opacity: 0.03; color: var(--gold); animation: suit-drift linear infinite; }
+        @keyframes suit-drift { 0% { transform: translateY(110vh) rotate(0deg); } 100% { transform: translateY(-10vh) rotate(360deg); } }
+
+        .orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; animation: orb-pulse 8s ease-in-out infinite alternate; }
+        .orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(212,168,67,0.08), transparent 70%); top: 10%; right: -10%; }
+        .orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,168,67,0.06), transparent 70%); top: 50%; left: -5%; animation-delay: 3s; }
+        .orb-3 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(212,168,67,0.07), transparent 70%); bottom: 5%; right: 20%; animation-delay: 5s; }
+        @keyframes orb-pulse { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.3); } }
+
+        .starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: var(--gold-light); border-radius: 50%; animation: twinkle ease-in-out infinite alternate; }
+        @keyframes twinkle { 0% { opacity: 0.05; transform: scale(0.8); } 100% { opacity: 0.5; transform: scale(1.3); } }
+
+        /* HERO */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; position: relative; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,168,67,0.14) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 100%, rgba(212,168,67,0.07) 0%, transparent 50%), var(--black); }
+        .hero::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(212,168,67,0.012) 2px,rgba(212,168,67,0.012) 4px); pointer-events: none; }
+        .magic-circle { position: absolute; width: clamp(500px,70vw,900px); height: clamp(500px,70vw,900px); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; z-index: 1; opacity: 0.04; animation: mc-rot 60s linear infinite; }
+        @keyframes mc-rot { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+        .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; background: var(--gold); border-radius: 50%; opacity: 0; animation: fup 6s infinite; }
+        .particle-diamond { background: none!important; width: 8px!important; height: 8px!important; border: 1px solid var(--gold); border-radius: 0!important; animation-name: fup-spin!important; }
+        @keyframes fup { 0% { opacity: 0; transform: translateY(100vh) scale(0); } 20% { opacity: 0.7; } 80% { opacity: 0.2; } 100% { opacity: 0; transform: translateY(-10vh) scale(1); } }
+        @keyframes fup-spin { 0% { opacity: 0; transform: translateY(100vh) rotate(0) scale(0); } 20% { opacity: 0.5; } 100% { opacity: 0; transform: translateY(-10vh) rotate(720deg) scale(1); } }
+
+        .floating-card { position: absolute; width: 60px; height: 85px; border-radius: 6px; border: 1px solid rgba(212,168,67,0.1); background: rgba(26,26,26,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold); opacity: 0.07; pointer-events: none; z-index: 0; }
+        .fc1 { top: 12%; left: 5%; animation: cf1 12s ease-in-out infinite; }
+        .fc2 { top: 35%; right: 3%; animation: cf2 14s ease-in-out infinite; }
+        .fc3 { bottom: 22%; left: 8%; animation: cf1 10s ease-in-out infinite; }
+        .fc4 { top: 65%; right: 7%; animation: cf2 16s ease-in-out infinite; }
+        @keyframes cf1 { 0%,100% { transform: rotate(-15deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-20px); } }
+        @keyframes cf2 { 0%,100% { transform: rotate(10deg) translateY(0); } 50% { transform: rotate(15deg) translateY(-25px); } }
+
+        .hero-content { position: relative; z-index: 2; max-width: 900px; animation: fadeUp 1s ease-out; transition: transform 0.15s ease-out; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shimmer { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+        .h1-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-60%); width: 60%; height: 120px; background: radial-gradient(ellipse,rgba(212,168,67,0.12) 0%,transparent 70%); filter: blur(40px); pointer-events: none; z-index: -1; animation: gpulse 4s ease-in-out infinite alternate; }
+        @keyframes gpulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        .badge { display: inline-block; padding: 0.5rem 1.8rem; border: 1px solid var(--gold); border-radius: 50px; font-size: 0.85rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 2.5rem; animation: fadeUp 1s ease-out 0.2s both; position: relative; overflow: hidden; backdrop-filter: blur(4px); background: rgba(212,168,67,0.04); }
+        .badge::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(212,168,67,0.2),transparent); animation: bshine 3s infinite; }
+        @keyframes bshine { 0% { left: -100%; } 100% { left: 200%; } }
+
+        h1, h2 { font-family: 'Rubik', sans-serif; }
+        h1 { font-weight: 900; font-size: clamp(2.2rem,5vw,3.8rem); line-height: 1.3; margin-bottom: 1.8rem; background: linear-gradient(135deg,var(--white) 0%,var(--gold-light) 50%,var(--white) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: fadeUp 1s ease-out 0.4s both, shimmer 6s linear infinite; }
+        .hero-subtitle { font-size: clamp(1rem,2vw,1.25rem); color: var(--white-dim); line-height: 1.8; max-width: 750px; margin: 0 auto 2.5rem; font-weight: 300; animation: fadeUp 1s ease-out 0.6s both; }
+        .hero-subtitle strong { color: var(--gold-light); font-weight: 500; }
+
+        .cta-wrapper { animation: fadeUp 1s ease-out 0.8s both; }
+        .cta-btn { display: inline-block; padding: 1.2rem 3rem; background: var(--gradient-gold); color: var(--black); font-family: 'Rubik',sans-serif; font-size: 1.15rem; font-weight: 700; text-decoration: none; border-radius: 8px; position: relative; overflow: hidden; transition: all 0.4s ease; box-shadow: 0 4px 25px rgba(212,168,67,0.3),0 0 60px rgba(212,168,67,0.1); cursor: pointer; border: none; animation: ctaglow 2s ease-in-out infinite alternate; }
+        @keyframes ctaglow { 0% { box-shadow: 0 4px 25px rgba(212,168,67,0.3),0 0 60px rgba(212,168,67,0.1); } 100% { box-shadow: 0 4px 35px rgba(212,168,67,0.5),0 0 80px rgba(212,168,67,0.2); } }
+        .cta-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); transition: left 0.6s; }
+        .cta-btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 40px rgba(212,168,67,0.5),0 0 100px rgba(212,168,67,0.25); }
+        .cta-btn:hover::before { left: 100%; }
+        .cta-sub { display: block; font-size: 0.8rem; font-weight: 400; opacity: 0.8; margin-top: 0.3rem; }
+        .price-tag { display: inline-block; margin-top: 1rem; font-size: 0.9rem; color: var(--white-dim); animation: fadeUp 1s ease-out 1s both; }
+        .price-tag span { color: var(--gold); font-weight: 700; font-size: 1.1rem; }
+        .scroll-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: var(--gold); opacity: 0.5; animation: bounce 2s infinite; z-index: 2; }
+        .scroll-indicator svg { width: 24px; height: 24px; }
+        @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+
+        /* SECTIONS */
+        .section { padding: 6rem 2rem; position: relative; z-index: 1; }
+        .container { max-width: 850px; margin: 0 auto; }
+        .section-border-top { position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg,transparent 5%,var(--gold) 50%,transparent 95%); opacity: 0.15; }
+        .problem-section { background: radial-gradient(ellipse 50% 50% at 0% 50%,rgba(212,168,67,0.05) 0%,transparent 70%), var(--black-soft); }
+        .section-label { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--gold); font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 2rem; }
+        .section-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+        .story-text { font-size: clamp(1.05rem,1.8vw,1.2rem); line-height: 2; color: var(--white-dim); font-weight: 300; }
+        .story-text p { margin-bottom: 1.8rem; }
+        .story-text strong { color: var(--white); font-weight: 500; }
+        .story-text em { color: var(--gold-light); font-style: normal; }
+        .highlight-box { border-right: 3px solid var(--gold); padding: 1.5rem 2rem; margin: 2.5rem 0; background: linear-gradient(90deg,rgba(212,168,67,0.07) 0%,transparent 100%); border-radius: 0 8px 8px 0; position: relative; }
+        .highlight-box::before { content: '\2726'; position: absolute; top: -10px; left: 10px; font-size: 1.5rem; color: var(--gold); opacity: 0.1; animation: srot 6s linear infinite; }
+        @keyframes srot { to { transform: rotate(360deg); } }
+        .highlight-box p { margin-bottom: 0!important; color: var(--white); font-weight: 400; font-size: 1.15rem; }
+        .divider { display: flex; align-items: center; justify-content: center; gap: 1.5rem; padding: 0 2rem; position: relative; z-index: 1; }
+        .divider-line { flex: 1; max-width: 200px; height: 1px; background: linear-gradient(90deg,transparent,var(--gold),transparent); }
+        .divider-icon { color: var(--gold); font-size: 1.5rem; animation: dflip 4s ease-in-out infinite; }
+        @keyframes dflip { 0%,100% { transform: rotateY(0); } 50% { transform: rotateY(180deg); } }
+
+        /* ===== CARD SCROLL SECTION ===== */
+        .cards-section { background: var(--black); padding: 0; position: relative; z-index: 1; }
+        .cards-scroll-container { height: 420vh; position: relative; }
+        .cards-sticky { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+
+        .cards-header { text-align: center; margin-bottom: 2rem; z-index: 2; }
+        .cards-header .section-label { justify-content: center; }
+        .cards-header h2 { font-family: 'Rubik',sans-serif; font-weight: 900; font-size: clamp(1.8rem,3.5vw,2.5rem); background: linear-gradient(135deg,var(--white),var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+        .cards-header p { color: var(--white-dim); font-size: 1rem; font-weight: 300; }
+
+        .cards-main { display: flex; align-items: stretch; gap: 3rem; max-width: 1100px; width: 100%; padding: 0 2rem; position: relative; }
+
+        /* DECK */
+        .deck-area { flex: 0 0 320px; position: relative; perspective: 1200px; min-height: 340px; }
+
+        .deck-card-back { position: absolute; width: 160px; height: 230px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-radius: 12px; background: linear-gradient(145deg, #1a1a1a, #0d0d0d); border: 2px solid var(--gold); box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(212,168,67,0.08); transition: opacity 0.5s, transform 0.8s; z-index: 10; overflow: hidden; }
+        .card-back-inner { position: absolute; inset: 8px; border-radius: 8px; border: 1px solid rgba(212,168,67,0.25); background: repeating-conic-gradient(rgba(212,168,67,0.04) 0% 25%, transparent 0% 50%) 0 0 / 20px 20px; display: flex; align-items: center; justify-content: center; }
+        .card-back-inner::before { content: '\2726'; font-size: 3rem; color: var(--gold); opacity: 0.25; }
+        .deck-card-back.flipped { opacity: 0; transform: translate(-50%,-50%) rotateY(180deg) scale(0.7); pointer-events: none; }
+
+        /* ACE CARDS - realistic playing cards */
+        .ace { position: absolute; width: 120px; height: 175px; border-radius: 10px; background: #fafaf5; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2); opacity: 0; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.6); z-index: 5; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden; }
+        .ace::before { content: ''; position: absolute; inset: 4px; border: 1px solid rgba(0,0,0,0.06); border-radius: 7px; pointer-events: none; }
+
+        .ace-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+        .ace-pip { font-size: 4rem; line-height: 1; }
+        .ace-corner-mark { position: absolute; display: flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; }
+        .ace-corner-mark .c-rank { font-size: 0.85rem; font-weight: 700; font-family: 'Rubik',sans-serif; }
+        .ace-corner-mark .c-suit { font-size: 0.75rem; }
+        .ace-tl { top: 6px; right: 7px; }
+        .ace-br { bottom: 6px; left: 7px; transform: rotate(180deg); }
+
+        /* Suit colors */
+        .ace-spade .ace-pip, .ace-spade .ace-corner-mark { color: #1a1a1a; }
+        .ace-heart .ace-pip, .ace-heart .ace-corner-mark { color: #cc2222; }
+        .ace-diamond .ace-pip, .ace-diamond .ace-corner-mark { color: #cc2222; }
+        .ace-club .ace-pip, .ace-club .ace-corner-mark { color: #1a1a1a; }
+
+        /* Spread positions */
+        .ace.visible { opacity: 1; }
+        .ace:nth-child(2).visible { transform: translate(calc(-50% - 95px), calc(-50% + 5px)) rotate(-8deg); z-index: 5; }
+        .ace:nth-child(3).visible { transform: translate(calc(-50% - 32px), calc(-50% + 12px)) rotate(-3deg); z-index: 6; }
+        .ace:nth-child(4).visible { transform: translate(calc(-50% + 32px), calc(-50% + 12px)) rotate(3deg); z-index: 7; }
+        .ace:nth-child(5).visible { transform: translate(calc(-50% + 95px), calc(-50% + 5px)) rotate(8deg); z-index: 8; }
+
+        /* Active = pulled up */
+        .ace.active { box-shadow: 0 15px 50px rgba(0,0,0,0.5), 0 0 25px rgba(212,168,67,0.15); z-index: 20 !important; }
+        .ace:nth-child(2).visible.active { transform: translate(calc(-50% - 95px), calc(-50% - 50px)) rotate(-4deg) scale(1.08); }
+        .ace:nth-child(3).visible.active { transform: translate(calc(-50% - 32px), calc(-50% - 40px)) rotate(-1deg) scale(1.08); }
+        .ace:nth-child(4).visible.active { transform: translate(calc(-50% + 32px), calc(-50% - 40px)) rotate(1deg) scale(1.08); }
+        .ace:nth-child(5).visible.active { transform: translate(calc(-50% + 95px), calc(-50% - 50px)) rotate(4deg) scale(1.08); }
+
+        /* Gold highlight ring on active */
+        .ace.active::after { content: ''; position: absolute; inset: -3px; border-radius: 12px; border: 2px solid var(--gold); opacity: 0.6; pointer-events: none; }
+
+        /* BENEFIT CONTENT */
+        .benefits-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; }
+
+        .benefit-item { position: relative; padding: 1.4rem 1.6rem 1.4rem 4.5rem; border-radius: 14px; border: 1px solid transparent; transition: all 0.5s ease; overflow: hidden; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+
+        /* Large gold icon in background */
+        .benefit-item .bg-icon { position: absolute; left: -15px; top: 50%; transform: translateY(-50%); font-size: 5rem; line-height: 1; color: var(--gold); opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 0; user-select: none; }
+        .benefit-item.active .bg-icon { opacity: 0.12; }
+
+        .benefit-item .b-content { position: relative; z-index: 1; }
+        .benefit-item .b-title { font-weight: 700; font-size: 1.15rem; color: var(--white-dim); margin-bottom: 0; transition: all 0.4s; }
+        .benefit-item.active .b-title { color: var(--gold-light); font-size: 1.25rem; margin-bottom: 0.5rem; }
+
+        .benefit-item .b-desc { color: var(--white-dim); line-height: 1.8; font-weight: 300; font-size: 0.95rem; max-height: 0; overflow: hidden; opacity: 0; transition: all 0.5s ease; }
+        .benefit-item.active .b-desc { max-height: 150px; opacity: 0.85; }
+
+        .benefit-item.active { background: rgba(212,168,67,0.03); border-color: rgba(212,168,67,0.1); }
+
+        /* Small accent line */
+        .benefit-item::before { content: ''; position: absolute; right: 0; top: 15%; height: 70%; width: 2px; background: var(--gold); opacity: 0; transition: opacity 0.4s; border-radius: 1px; }
+        .benefit-item.active::before { opacity: 0.4; }
+
+        /* Progress */
+        .scroll-progress { position: absolute; left: 2rem; top: 50%; transform: translateY(-50%); width: 3px; height: 200px; background: rgba(212,168,67,0.08); border-radius: 2px; z-index: 10; }
+        .scroll-progress-fill { width: 100%; background: var(--gradient-gold); border-radius: 2px; transition: height 0.3s ease; height: 0%; }
+        .scroll-progress-dot { position: absolute; width: 9px; height: 9px; background: var(--gold); border-radius: 50%; left: -3px; transition: top 0.3s ease; top: 0%; box-shadow: 0 0 10px var(--gold); }
+
+        /* CLOSING */
+        .closing-section { background: radial-gradient(ellipse 60% 50% at 50% 100%,rgba(212,168,67,0.12) 0%,transparent 60%), var(--black-soft); text-align: center; }
+        .closing-text { font-size: clamp(1rem,1.8vw,1.15rem); color: var(--white-dim); line-height: 2; max-width: 700px; margin: 0 auto 3rem; font-weight: 300; }
+        .closing-text strong { color: var(--white); font-weight: 500; }
+        .closing-text em { color: var(--gold-light); font-style: normal; }
+        .price-block { margin-bottom: 2.5rem; position: relative; }
+        .price-amount { font-family: 'Rubik',sans-serif; font-size: clamp(3rem,6vw,4.5rem); font-weight: 900; background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; }
+        .price-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 250px; height: 100px; background: radial-gradient(ellipse,rgba(212,168,67,0.15),transparent 70%); filter: blur(30px); pointer-events: none; animation: gpulse 3s ease-in-out infinite alternate; }
+        .price-context { color: var(--white-dim); font-size: 1rem; font-weight: 300; }
+        .urgency-text { color: var(--gold); font-size: 1.1rem; font-weight: 500; margin-top: 2rem; margin-bottom: 1rem; }
+        .footer { padding: 2rem; text-align: center; color: rgba(200,192,176,0.3); font-size: 0.8rem; border-top: 1px solid rgba(212,168,67,0.08); position: relative; z-index: 1; }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25,0.46,0.45,0.94); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .sparkle { position: fixed; pointer-events: none; z-index: 9998; animation: sfade 1s ease-out forwards; }
+        .sparkle-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+        .sparkle-star { color: var(--gold-light); }
+        @keyframes sfade { 0% { opacity: 1; transform: scale(1) translateY(0); } 100% { opacity: 0; transform: scale(0) translateY(-20px); } }
+
+        @media (max-width: 900px) {
+            .cards-main { flex-direction: column; gap: 1.5rem; padding: 1.5rem; }
+            .deck-area { flex: 0 0 250px; width: 100%; min-height: 250px; }
+            .cards-scroll-container { height: 500vh; }
+            .scroll-progress { display: none; }
+            .floating-card { display: none; }
+            .ace { width: 85px; height: 125px; }
+            .ace-pip { font-size: 2.8rem; }
+            .ace-corner-mark .c-rank { font-size: 0.65rem; }
+            .ace-corner-mark .c-suit { font-size: 0.55rem; }
+            .ace:nth-child(2).visible { transform: translate(calc(-50% - 65px),calc(-50% + 3px)) rotate(-8deg); }
+            .ace:nth-child(3).visible { transform: translate(calc(-50% - 22px),calc(-50% + 8px)) rotate(-3deg); }
+            .ace:nth-child(4).visible { transform: translate(calc(-50% + 22px),calc(-50% + 8px)) rotate(3deg); }
+            .ace:nth-child(5).visible { transform: translate(calc(-50% + 65px),calc(-50% + 3px)) rotate(8deg); }
+            .ace:nth-child(2).visible.active { transform: translate(calc(-50% - 65px),calc(-50% - 35px)) rotate(-4deg) scale(1.08); }
+            .ace:nth-child(3).visible.active { transform: translate(calc(-50% - 22px),calc(-50% - 28px)) rotate(-1deg) scale(1.08); }
+            .ace:nth-child(4).visible.active { transform: translate(calc(-50% + 22px),calc(-50% - 28px)) rotate(1deg) scale(1.08); }
+            .ace:nth-child(5).visible.active { transform: translate(calc(-50% + 65px),calc(-50% - 35px)) rotate(4deg) scale(1.08); }
+            .deck-card-back { width: 120px; height: 175px; }
+            .benefit-item .bg-icon { font-size: 3.5rem; left: -10px; }
+            .benefit-item { padding-left: 3rem; }
+        }
+        @media (max-width: 768px) {
+            .hero { padding: 2rem 1.5rem; }
+            .section { padding: 4rem 1.5rem; }
+            .cta-btn { padding: 1rem 2rem; font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-suits" id="bgSuits"></div>
+    <div class="starfield" id="starfield"></div>
+    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <svg class="magic-circle" viewBox="0 0 500 500"><circle cx="250" cy="250" r="240" fill="none" stroke="#D4A843" stroke-width="0.5" stroke-dasharray="8 12"/><circle cx="250" cy="250" r="200" fill="none" stroke="#D4A843" stroke-width="0.3" stroke-dasharray="4 8"/><circle cx="250" cy="250" r="160" fill="none" stroke="#D4A843" stroke-width="0.5" stroke-dasharray="2 6"/><polygon points="250,30 295,180 450,180 325,270 365,420 250,330 135,420 175,270 50,180 205,180" fill="none" stroke="#D4A843" stroke-width="0.3"/></svg>
+        <div class="particles" id="particles"></div>
+        <div class="floating-card fc1">&#9824;</div><div class="floating-card fc2">&#9829;</div><div class="floating-card fc3">&#9830;</div><div class="floating-card fc4">&#9827;</div>
+        <div class="hero-content" id="heroContent">
+            <div class="h1-glow"></div>
+            <div class="badge">&#10024; &#1511;&#1493;&#1512;&#1505; &#1511;&#1505;&#1502;&#1497;&#1501; &#1493;&#1488;&#1493;&#1502;&#1504;&#1493;&#1514; &#1495;&#1493;&#1513;&#1497;&#1501; &#10024;</div>
+            <h1>איך להדהים כל אחד, בכל מקום –<br>תוך דקות (בלי שום ידע מוקדם)</h1>
+            <p class="hero-subtitle">הקיצור שלך לעולם הקסמים ואומנות החושים: למד את <strong>הסודות הכי שמורים</strong> של הקלפים, הטריקים הפסיכולוגיים והקריאה המחשבתית – <strong>במחיר מצחיק של ארוחת ערב.</strong></p>
+            <div class="cta-wrapper"><a href="#" class="cta-btn">כן! אני רוצה גישה מיידית לקורס ב-197 ₪ בלבד<span class="cta-sub">קבל גישה דיגיטלית מיידית למייל</span></a></div>
+            <p class="price-tag">&#128179; תשלום מאובטח · גישה מיידית · <span>197 ₪</span> בלבד</p>
+        </div>
+        <div class="scroll-indicator"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></div>
+    </section>
+
+    <!-- STORY -->
+    <section class="section problem-section">
+        <div class="section-border-top"></div>
+        <div class="container">
+            <div class="section-label reveal">הסיפור</div>
+            <div class="story-text">
+                <p class="reveal">מכיר את הרגע הזה במסיבה או בארוחה משפחתית שבו האנרגיה יורדת? כולם בטלפונים, השיחה נתקעת, <strong>וחסר ה"ניצוץ" הזה שיעיר את כולם?</strong></p>
+                <div class="highlight-box reveal"><p>עכשיו דמיין שאתה שולף חפיסת קלפים, או סתם מבקש ממישהו לחשוב על מספר – <em>ובתוך 30 שניות כולם עם פה פעור, מסתכלים רק עליך.</em></p></div>
+                <p class="reveal">קוראים לי <strong>יאיר</strong>, ואני אמן חושים. ביומיום אני מלמד אנשים איך לשלוט בתודעה ברמה הגבוהה ביותר. אבל שמתי לב למשהו מעניין: <em>רוב האנשים לא מחפשים להיות קוסמים מקצועיים.</em> הם פשוט רוצים לדעת איך לעשות את ה"קסם" הזה שגורם לאנשים לחייך, להתרגש ולזכור אותם.</p>
+                <p class="reveal">לכן יצרתי את <strong>״ערכת ההתחלה״</strong>: קורס ממוקד, פרקטי ומהיר ב-<em>197 ש״ח בלבד.</em></p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"><div class="divider-line"></div><span class="divider-icon">&#9824;</span><div class="divider-line"></div></div>
+
+    <!-- SCROLL CARD SECTION -->
+    <section class="cards-section" id="cardsSection">
+        <div class="cards-scroll-container" id="cardsScroll">
+            <div class="cards-sticky">
+                <div class="cards-header">
+                    <div class="section-label" style="justify-content:center;">מה בפנים</div>
+                    <h2>מה לומדים בקורס?</h2>
+                    <p>בחרתי בפינצטה את הטריקים שנותנים את האימפקט הכי חזק במינימום מאמץ:</p>
+                </div>
+
+                <div class="cards-main">
+                    <div class="deck-area">
+                        <div class="deck-card-back" id="cardBack"><div class="card-back-inner"></div></div>
+                        <!-- 4 Realistic Ace cards -->
+                        <div class="ace ace-spade">
+                            <div class="ace-inner">
+                                <div class="ace-corner-mark ace-tl"><span class="c-rank">A</span><span class="c-suit">&#9824;</span></div>
+                                <span class="ace-pip">&#9824;</span>
+                                <div class="ace-corner-mark ace-br"><span class="c-rank">A</span><span class="c-suit">&#9824;</span></div>
+                            </div>
+                        </div>
+                        <div class="ace ace-heart">
+                            <div class="ace-inner">
+                                <div class="ace-corner-mark ace-tl"><span class="c-rank">A</span><span class="c-suit">&#9829;</span></div>
+                                <span class="ace-pip">&#9829;</span>
+                                <div class="ace-corner-mark ace-br"><span class="c-rank">A</span><span class="c-suit">&#9829;</span></div>
+                            </div>
+                        </div>
+                        <div class="ace ace-diamond">
+                            <div class="ace-inner">
+                                <div class="ace-corner-mark ace-tl"><span class="c-rank">A</span><span class="c-suit">&#9830;</span></div>
+                                <span class="ace-pip">&#9830;</span>
+                                <div class="ace-corner-mark ace-br"><span class="c-rank">A</span><span class="c-suit">&#9830;</span></div>
+                            </div>
+                        </div>
+                        <div class="ace ace-club">
+                            <div class="ace-inner">
+                                <div class="ace-corner-mark ace-tl"><span class="c-rank">A</span><span class="c-suit">&#9827;</span></div>
+                                <span class="ace-pip">&#9827;</span>
+                                <div class="ace-corner-mark ace-br"><span class="c-rank">A</span><span class="c-suit">&#9827;</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="benefits-content">
+                        <div class="benefit-item" data-index="0">
+                            <span class="bg-icon">&#9824;</span>
+                            <div class="b-content">
+                                <div class="b-title">שליטה בקלפים</div>
+                                <p class="b-desc">איך לגרום לקלף להיעלם, להופיע ולהשתנות מול העיניים שלהם – טכניקות בסיס שנראות כמו כישוף אמיתי.</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item" data-index="1">
+                            <span class="bg-icon">&#9829;</span>
+                            <div class="b-content">
+                                <div class="b-title">טעימה מאומנות חושים</div>
+                                <p class="b-desc">איך לדעת על מה החבר שלך חושב ואיך "לשתול" לו מחשבות – בדיוק כמו שאתה רואה בטלוויזיה.</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item" data-index="2">
+                            <span class="bg-icon">&#9830;</span>
+                            <div class="b-content">
+                                <div class="b-title">קסמי "על הדרך"</div>
+                                <p class="b-desc">טריקים מדהימים עם חפצים יומיומיים שיש בכל בית, כדי שתמיד תהיה מוכן לשלוף שפן מהכובע (גם בלי כובע).</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item" data-index="3">
+                            <span class="bg-icon">&#9827;</span>
+                            <div class="b-content">
+                                <div class="b-title">הסוד האמיתי</div>
+                                <p class="b-desc">איך להגיש את הקסם. איך לבנות מתח, איך לספר סיפור ואיך לקבל את מחיאות הכפיים בסוף.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scroll-progress"><div class="scroll-progress-fill" id="progressFill"></div><div class="scroll-progress-dot" id="progressDot"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"><div class="divider-line"></div><span class="divider-icon">&#9830;</span><div class="divider-line"></div></div>
+
+    <!-- CLOSING -->
+    <section class="section closing-section">
+        <div class="section-border-top"></div>
+        <div class="container">
+            <div class="section-label reveal" style="justify-content:center;">הזמנה</div>
+            <h2 class="reveal" style="text-align:center;font-weight:900;font-size:clamp(1.8rem,3.5vw,2.5rem);background:linear-gradient(135deg,var(--white),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.5rem;">למה דווקא הקורס הזה?</h2>
+            <div class="closing-text reveal">
+                <p>אתה לא צריך "ידיים מהירות" ואתה לא צריך להיות שחקן הוליוודי. השיטות שאני מלמד בקורס הזה <strong>בנויות כך שכל אחד יכול להצליח בהן, ומהר.</strong></p><br>
+                <p>במחיר של <em>197 ש"ח</em> (פחות מבילוי שישי בערב), אתה מקבל <strong>גישה לידע שילווה אותך לכל החיים.</strong> בפעם הבאה שישאלו "מי יודע לעשות משהו מגניב?" – אתה תהיה זה שיחייך.</p>
+            </div>
+            <div class="price-block reveal"><div class="price-glow"></div><span class="price-amount">₪197</span><span class="price-context">פחות מבילוי שישי בערב</span></div>
+            <div class="reveal"><a href="#" class="cta-btn">כן יאיר! אני רוצה גישה מיידית לקורס ב-197 ₪ בלבד<span class="cta-sub">קבל גישה דיגיטלית מיידית למייל</span></a></div>
+            <p class="urgency-text reveal">אל תחכה לרגע המביך הבא. תפוס את המקום שלך עכשיו ותתחיל להדהים. 🎩</p>
+        </div>
+    </section>
+
+    <footer class="footer"><p>&copy; 2026 יאיר – אמן חושים | כל הזכויות שמורות</p></footer>
+
+    <script>
+        // Particles
+        const pc=document.getElementById('particles');
+        for(let i=0;i<35;i++){const p=document.createElement('div');const d=Math.random()>0.7;p.classList.add('particle');if(d)p.classList.add('particle-diamond');p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*6+'s';p.style.animationDuration=(4+Math.random()*5)+'s';if(!d){const s=(2+Math.random()*3)+'px';p.style.width=s;p.style.height=s;}pc.appendChild(p);}
+
+        // Stars
+        const sf=document.getElementById('starfield');
+        for(let i=0;i<80;i++){const s=document.createElement('div');s.classList.add('star');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDuration=(2+Math.random()*4)+'s';s.style.animationDelay=Math.random()*3+'s';const z=(1+Math.random()*2)+'px';s.style.width=z;s.style.height=z;sf.appendChild(s);}
+
+        // BG Suits
+        const suits=['\u2660','\u2665','\u2666','\u2663','\u2726','\u27E1'];
+        const bs=document.getElementById('bgSuits');
+        for(let i=0;i<15;i++){const s=document.createElement('div');s.classList.add('bg-suit');s.textContent=suits[Math.floor(Math.random()*suits.length)];s.style.left=Math.random()*100+'%';s.style.fontSize=(1.5+Math.random()*3)+'rem';s.style.animationDuration=(15+Math.random()*20)+'s';s.style.animationDelay=Math.random()*15+'s';bs.appendChild(s);}
+
+        // Scroll Reveal
+        const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.15});
+        document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+        // Sparkle cursor
+        if(window.innerWidth>768){let last=0;const sc=['\u2726','\u2727','\u27E1','\u2736'];document.addEventListener('mousemove',e=>{const now=Date.now();if(now-last<60)return;last=now;const sp=document.createElement('div');sp.classList.add('sparkle');if(Math.random()>0.5){sp.classList.add('sparkle-dot');const z=(3+Math.random()*4)+'px';sp.style.width=z;sp.style.height=z;}else{sp.classList.add('sparkle-star');sp.textContent=sc[Math.floor(Math.random()*sc.length)];sp.style.fontSize=(8+Math.random()*8)+'px';}sp.style.left=e.clientX+(Math.random()-0.5)*16+'px';sp.style.top=e.clientY+(Math.random()-0.5)*16+'px';document.body.appendChild(sp);setTimeout(()=>sp.remove(),1000);});}
+
+        // Hero tilt
+        if(window.innerWidth>768){const hero=document.getElementById('hero'),hc=document.getElementById('heroContent');hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-0.5;const y=(e.clientY-r.top)/r.height-0.5;hc.style.transform='perspective(1000px) rotateY('+x*2+'deg) rotateX('+(-y*2)+'deg)';});hero.addEventListener('mouseleave',()=>{hc.style.transform='perspective(1000px) rotateY(0) rotateX(0)';});}
+
+        // Parallax orbs
+        window.addEventListener('scroll',()=>{const y=window.scrollY;document.querySelectorAll('.orb').forEach((o,i)=>{o.style.transform='translateY('+y*(0.02+i*0.01)+'px)';});});
+
+        // CTA
+        document.querySelectorAll('.cta-btn').forEach(b=>{b.addEventListener('click',e=>{e.preventDefault();alert('\u05DB\u05D0\u05DF \u05EA\u05D5\u05E1\u05D9\u05E3 \u05D0\u05EA \u05D4\u05DC\u05D9\u05E0\u05E7 \u05DC\u05E2\u05DE\u05D5\u05D3 \u05D4\u05EA\u05E9\u05DC\u05D5\u05DD \uD83C\uDFA9');});});
+
+        // ===== SCROLL CARD ANIMATION =====
+        const cardsScroll=document.getElementById('cardsScroll');
+        const cardBack=document.getElementById('cardBack');
+        const aces=document.querySelectorAll('.ace');
+        const benefitItems=document.querySelectorAll('.benefit-item');
+        const progressFill=document.getElementById('progressFill');
+        const progressDot=document.getElementById('progressDot');
+
+        function updateCards(){
+            const rect=cardsScroll.getBoundingClientRect();
+            const scrollTop=-rect.top;
+            const scrollHeight=cardsScroll.offsetHeight-window.innerHeight;
+            const progress=Math.max(0,Math.min(1,scrollTop/scrollHeight));
+
+            const pct=progress*100;
+            progressFill.style.height=pct+'%';
+            progressDot.style.top=pct+'%';
+
+            // Phase 1: flip card back (0-15%)
+            const flipP=Math.min(1,progress/0.15);
+            if(flipP>=1){cardBack.classList.add('flipped');}
+            else{cardBack.classList.remove('flipped');cardBack.style.transform='translate(-50%,-50%) rotateY('+(flipP*180)+'deg)';cardBack.style.opacity=1-flipP*0.5;}
+
+            // Phase 2: spread aces (12-22%)
+            const spreadP=Math.max(0,Math.min(1,(progress-0.12)/0.1));
+            if(spreadP>0){aces.forEach(a=>a.classList.add('visible'));}
+            else{aces.forEach(a=>{a.classList.remove('visible');a.classList.remove('active');});}
+
+            // Phase 3: cycle through cards (25-95%)
+            const cycleP=Math.max(0,Math.min(1,(progress-0.25)/0.7));
+            const activeIdx=Math.min(3,Math.floor(cycleP*4));
+
+            if(progress>=0.25){
+                aces.forEach((ace,i)=>{ace.classList.toggle('active',i===activeIdx);});
+                benefitItems.forEach((item,i)=>{item.classList.toggle('active',i===activeIdx);});
+            }else{
+                aces.forEach(a=>a.classList.remove('active'));
+                benefitItems.forEach(b=>b.classList.remove('active'));
+            }
+        }
+
+        window.addEventListener('scroll',updateCards,{passive:true});
+        updateCards();
+    </script>
+</body>
+</html>
