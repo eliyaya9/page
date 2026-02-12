@@ -11,6 +11,7 @@ cd /workspace/page
 
 - http://127.0.0.1:4173
 - או http://localhost:4173
+- או http://127.0.0.1:4173/preview/
 
 ## אם עדיין לא נפתח
 
